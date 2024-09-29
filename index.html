@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <video id="video"></video>
+
+    <Script>
+        // Lấy danh sách các thiết bị video
+        navigator.mediaDevices.enumerateDevices()
+            .then(devices => {
+                // Lọc ra các thiết bị video
+                const videoDevices = devices.filter(device => device.kind === 'videoinput');
+
+                // Hiển thị danh sách các thiết bị video (nếu có)
+                console.log('Các thiết bị video:', videoDevices);
+
+                // Chọn thiết bị video đầu tiên (hoặc thiết bị bạn muốn)
+                const selectedDevice = videoDevices[0];
+
+                // Khởi tạo luồng video
+                navigator.mediaDevices.getUserMedia({ video: { deviceId: selectedDevice.deviceId } })
+                    .then(stream => {
+                        // Lấy thẻ video từ HTML
+                        const videoElement = document.getElementById('video');
+
+                        // Hiển thị luồng video trên thẻ video
+                        videoElement.srcObject = stream;
+                        videoElement.play();
+                    })
+                    .catch(err => {
+                        console.error('Lỗi khi truy cập camera:', err);
+                    });
+            })
+            .catch(err => {
+                console.error('Lỗi khi liệt kê thiết bị:', err);
+            });
+    </Script>
+
+</body>
+
+</html>
